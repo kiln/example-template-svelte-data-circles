@@ -1,6 +1,6 @@
-id: data-circles
-name: Data circles
-author: Flourish team
+id: svelte-data-circles
+name: Svelte Data circles
+author: Rich Harris
 sdk_version: 2
 
 settings:
