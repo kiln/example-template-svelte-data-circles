@@ -14,7 +14,9 @@ export default {
   plugins: [
     nodeResolve({ jsnext: true }),
     svelte(),
-    buble(),
+    buble({
+      transforms: { dangerousForOf: true }
+    }),
     uglify(),
   ]
 };

@@ -1,0 +1,25 @@
+<circle ref:node
+	cx='{{cx}}' cy='{{cy}}' r='{{r}}'
+	fill='{{fill}}' opacity='{{opacity}}'
+	on:click='fire("popup", {cx, cy, word, event})'
+/>
+
+<script>
+	import tween from './tween.js';
+	import * as eases from 'eases-jsnext';
+
+	export default {
+		namespace: 'svg',
+
+		oncreate() {
+			for (const attr of ["cx", "cy", "r", "fill", "opacity"]) {
+				this.observe(attr, (newValue, oldValue) => {
+					tween(oldValue, newValue,
+						(val) => this.refs.node && this.refs.node.setAttribute(attr, val),
+						{ duration: 300, easing: eases.cubicInOut }
+					);
+				});
+			}
+		}
+	};
+</script>

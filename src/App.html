@@ -1,21 +1,20 @@
 <svg width='{{width}}' height='{{height}}' on:click='hidePopup()'>
-	{{#each _circles as circle}}
-		<circle
+	{{#each circles as circle}}
+		<Circle
 			cx='{{circle.x * width}}'
 			cy='{{circle.y * height}}'
 			r='{{Math.sqrt(circle.size)}}'
+			word='{{circle.word}}'
 			fill='{{color}}'
 			opacity='{{opacity}}'
-			on:click='showPopup(circle, event)'
+			on:popup='showPopup(event)'
 		/>
 	{{/each}}
 </svg>
 
 <script>
+	import Circle from "./Circle.html";
 	import Popup from '@flourish/popup';
-	import tween from './tween.js';
-	import * as eases from 'eases-jsnext';
-
 	const popup = new Popup();
 
 	export default {
@@ -23,51 +22,22 @@
 			return {
 				width: window.innerWidth,
 				height: window.innerHeight,
-				_circles: []
 			};
 		},
 
-		oncreate () {
-			const b = this.get( 'circles' ).map( ({ x, y, size, word }) => {
-				return {
-					x: +x,
-					y: +y,
-					size: +size,
-					word
-				};
-			});
-
-			const a = b.map( ({ x, y, size, word }) => {
-				return {
-					x: 0,
-					y: 0,
-					size: 0,
-					word
-				};
-			});
-
-			const t = tween( a, b, _circles => {
-				this.set({ _circles });
-			}, {
-				duration: 400,
-				easing: eases.cubicOut
-			});
-
-			this.on( 'destroy', () => {
-				popup.hide();
-				t.stop();
-			});
-		},
-
 		methods: {
-			showPopup ( circle, event ) {
-				event.stopPropagation();
-				popup.point( circle.x * window.innerWidth, circle.y * window.innerHeight ).html( circle.word ).draw();
+			showPopup ( event ) {
+				event.event.stopPropagation();
+				popup.point( event.cx, event.cy ).html( event.word ).draw();
 			},
 
 			hidePopup () {
 				popup.hide();
 			}
+		},
+
+		components: {
+			Circle
 		}
 	};
 </script>
